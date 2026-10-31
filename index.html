@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UNKNOWN</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: monospace;
+    transition: background 1s;
+}
+
+/* TEKST */
+#tekst {
+    color: white;
+    font-size: clamp(30px, 7vw, 65px);
+    text-align: center;
+    opacity: 0;
+    z-index: 5;
+    position: relative;
+    transition: opacity 1s;
+    letter-spacing: 3px;
+    padding: 20px;
+}
+
+/* DRŻENIE */
+.drzenie {
+    color: black !important;
+    animation: shake 0.07s infinite;
+    font-weight: bold;
+    text-shadow: 2px 0 rgba(0,0,0,.7);
+}
+
+@keyframes shake {
+    0% { transform: translate(0,0) skew(0deg); }
+    20% { transform: translate(-3px,2px) skew(2deg); }
+    40% { transform: translate(3px,-2px) skew(-2deg); }
+    60% { transform: translate(-2px,-1px); }
+    80% { transform: translate(2px,3px); }
+    100% { transform: translate(0,0); }
+}
+
+/* VHS */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0;
+    background: repeating-linear-gradient(
+        transparent 0px,
+        rgba(0,0,0,.2) 1px,
+        transparent 3px,
+        transparent 5px
+    );
+}
+
+.vhs::before {
+    opacity: .7;
+    animation: scan 0.15s infinite;
+}
+
+@keyframes scan {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(5px); }
+}
+
+/* SZUM */
+#noise {
+    position: fixed;
+    inset: -50%;
+    width: 200%;
+    height: 200%;
+    pointer-events: none;
+    z-index: 8;
+    opacity: 0;
+    background-image: url("https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Static_Noise_Texture.png");
+    background-size: 200px;
+    mix-blend-mode: screen;
+}
+
+.vhs #noise {
+    opacity: .12;
+    animation: noiseMove .15s steps(3) infinite;
+}
+
+@keyframes noiseMove {
+    0% { transform: translate(0,0); }
+    25% { transform: translate(-2%,3%); }
+    50% { transform: translate(3%,-2%); }
+    75% { transform: translate(-3%,-1%); }
+    100% { transform: translate(2%,2%); }
+}
+
+/* MIGOTANIE CZERWONEGO TŁA */
+.red {
+    animation: redFlicker .3s infinite;
+}
+
+@keyframes redFlicker {
+    0%, 100% { background: #a00000; }
+    25% { background: #650000; }
+    50% { background: #c00000; }
+    75% { background: #850000; }
+}
+
+/* BIAŁY BŁYSK */
+#flash {
+    position: fixed;
+    inset: 0;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 20;
+}
+
+.flash {
+    animation: flashEffect .35s ease-out;
+}
+
+@keyframes flashEffect {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<div id="tekst">drzewa mają oczy. obserwujcie drzewa.</div>
+<div id="noise"></div>
+<div id="flash"></div>
+
+<script>
+const tekst = document.getElementById("tekst");
+const body = document.body;
+const flash = document.getElementById("flash");
+
+// PIERWSZY NAPIS
+setTimeout(() => {
+    tekst.style.opacity = "1";
+}, 2000);
+
+// ZNIKNIĘCIE PIERWSZEGO NAPISU
+setTimeout(() => {
+    tekst.style.opacity = "0";
+}, 5000);
+
+// CZERWONE TŁO + VHS
+setTimeout(() => {
+    body.classList.add("red", "vhs");
+}, 6500);
+
+// NAGŁY BIAŁY BŁYSK
+setTimeout(() => {
+    flash.classList.remove("flash");
+    void flash.offsetWidth;
+    flash.classList.add("flash");
+}, 7600);
+
+// DRUGI NAPIS
+setTimeout(() => {
+    tekst.textContent = "jedno już was obserwowało";
+    tekst.classList.add("drzenie");
+    tekst.style.opacity = "1";
+}, 8000);
+
+</script>
+
+</body>
+</html>
+
